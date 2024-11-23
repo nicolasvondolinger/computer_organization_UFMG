@@ -1,74 +1,74 @@
 .data
-##### R1 START MODIFIQUE AQUI START #####
-# Este espaço é para definir as constantes e vetores auxiliares, caso necessário.
-##### R1 END MODIFIQUE AQUI END #####
+##### R1 START MODIFY HERE START #####
+# This space is to define constants and auxiliary vectors, if necessary.
+##### R1 END MODIFY HERE END #####
 
 .text
-# Inicialização de testes
-add s0, zero, zero          # Quantidade de testes que passaram
+# Test initialization
+add s0, zero, zero          # Number of tests passed
 
-# Teste 1: MMC de 10 e 2 (resultado esperado: 10)
+# Test 1: LCM of 10 and 2 (expected result: 10)
 addi a0, zero, 10
 addi a1, zero, 2
-jal ra, mmc                 # Chama o procedimento mmc
-addi t0, zero, 10           # Resultado esperado
-bne a0, t0, teste2          # Se a0 != 10, passa para o próximo teste
-addi s0, s0, 1              # Incrementa s0 se o teste passou
+jal ra, mmc                 # Call the mmc procedure
+addi t0, zero, 10           # Expected result
+bne a0, t0, test2           # If a0 != 10, go to the next test
+addi s0, s0, 1              # Increment s0 if the test passed
 
-# Teste 2: MMC de 6 e 4 (resultado esperado: 12)
-teste2:
+# Test 2: LCM of 6 and 4 (expected result: 12)
+test2:
 addi a0, zero, 6
 addi a1, zero, 4
-jal ra, mmc                 # Chama o procedimento mmc
-addi t0, zero, 12           # Resultado esperado
-bne a0, t0, FIM             # Se a0 != 12, pula para o fim
-addi s0, s0, 1              # Incrementa s0 se o teste passou
+jal ra, mmc                 # Call the mmc procedure
+addi t0, zero, 12           # Expected result
+bne a0, t0, END             # If a0 != 12, skip to the end
+addi s0, s0, 1              # Increment s0 if the test passed
 
-beq zero, zero, FIM         # Salto incondicional para o fim
+beq zero, zero, END         # Unconditional jump to the end
 
-##### R2 START MODIFIQUE AQUI START #####
+##### R2 START MODIFY HERE START #####
 
-# Procedimento para calcular o MMC
+# Procedure to calculate the LCM
 mmc:
-    # Salva os registradores usados no procedimento na pilha
+    # Save the registers used in the procedure on the stack
     addi sp, sp, -16
     sw ra, 12(sp)
     sw s1, 8(sp)
     sw s2, 4(sp)
 
-    # Calcula o MDC usando o procedimento auxiliar
-    mv s1, a0                # s1 = a (primeiro número)
-    mv s2, a1                # s2 = b (segundo número)
-    jal ra, mdc              # Chama o procedimento mdc; resultado em a0
+    # Calculate the GCD using the auxiliary procedure
+    mv s1, a0                # s1 = a (first number)
+    mv s2, a1                # s2 = b (second number)
+    jal ra, mdc              # Call the mdc procedure; result in a0
 
-    # Calcula MMC usando a fórmula (a * b) / MDC
+    # Calculate LCM using the formula (a * b) / GCD
     mul a1, s1, s2           # a1 = a * b
-    div a0, a1, a0           # a0 = (a * b) / MDC
+    div a0, a1, a0           # a0 = (a * b) / GCD
 
-    # Restaura os registradores e retorna
+    # Restore the registers and return
     lw ra, 12(sp)
     lw s1, 8(sp)
     lw s2, 4(sp)
     addi sp, sp, 16
     jalr zero, 0(ra)
 
-# Procedimento auxiliar para calcular o MDC usando o Algoritmo de Euclides
+# Auxiliary procedure to calculate the GCD using the Euclidean Algorithm
 mdc:
     mv t0, a0                # t0 = a
     mv t1, a1                # t1 = b
 
 mdc_loop:
-    beq t1, zero, mdc_done   # Se t1 == 0, termina o loop
+    beq t1, zero, mdc_done   # If t1 == 0, exit the loop
     rem t2, t0, t1           # t2 = t0 % t1
     mv t0, t1                # t0 = t1
     mv t1, t2                # t1 = t2
-    beq zero, zero, mdc_loop # Repete o loop
+    beq zero, zero, mdc_loop # Repeat the loop
 
 mdc_done:
-    mv a0, t0                # Resultado MDC em a0
-    jalr zero, 0(ra)         # Retorna
+    mv a0, t0                # Result GCD in a0
+    jalr zero, 0(ra)         # Return
 
-##### R2 END MODIFIQUE AQUI END #####
+##### R2 END MODIFY HERE END #####
 
-FIM:
-    addi t0, s0, 0           # t0 = quantidade de testes que passaram
+END:
+    addi t0, s0, 0           # t0 = number of tests passed

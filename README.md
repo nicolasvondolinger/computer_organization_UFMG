@@ -1,1 +1,1 @@
-# computer_organization
+# Organização de Computadores - UFMG
